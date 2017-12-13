@@ -83,38 +83,14 @@ get '/robot/start/:id' do
   robot = Robot.get params[:id]
   robot.to_json
   if robot[:state] == "ready"
-  	
   	robot.update!(:state => 'starting')
   	
-  	robot = Robot.get params[:id]
-	  robot.to_json
-	  
-	  d = DateTime.now
-    d.strftime("%d/%m/%Y %H:%M")
-  	system("echo Starting up, wait for 3s...")
-  	system("echo state #{robot[:state]}; time #{d}")
-
+  	# To test intermidiate states
+  	system("echo sleeping 3s...")
   	sleep 3
-
-  	# robot = Robot.get params[:id]
-	  # robot.to_json
-
-	  d = DateTime.now
-    d.strftime("%d/%m/%Y %H:%M")
-    
-  	
-  	system("echo After 3s...")
-  	system("echo state #{robot[:state]}; time #{d}")
 
   	robot = Robot.get! params[:id]
 	  robot.to_json
-
-	  d = DateTime.now
-    d.strftime("%d/%m/%Y %H:%M")
-    
-  	
-  	system("echo second check...")
-  	system("echo state #{robot[:state]}; time #{d}")
 
 	  if robot[:state] == "starting"
 
@@ -170,11 +146,6 @@ get '/robot/stop/:id' do
   if ( robot[:state] == "started" || robot[:state] == "starting" )
   	
   	robot.update!(:state => 'stopping')
-
-  	d = DateTime.now
-    d.strftime("%d/%m/%Y %H:%M")
-
-    system("echo state: #{robot[:state]} time: #{d}")
 
   	# Maybe add time wait here?
   	robot.update!(:state => 'ready')
