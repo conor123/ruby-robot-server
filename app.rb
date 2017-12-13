@@ -24,14 +24,14 @@ end
 get '/initialize' do
 
   if (file = File.read 'robots.json')
-	  #robots = JSON.load(file, nil, symbolize_names: true)
-    # robots.each { |r| 
-    # 	robot = Robot.new(r.name, r.status = "ready")
-    # 	robot.save
-    # }
+	  robots = JSON.load(file, nil, symbolize_names: true)
+    robots.each { |r| 
+    	robot = Robot.new(name: r[:name], state: "ready")
+    	robot.save
+    }
 
-    robot = Robot.new(name: "Robbie", state: "ready")
-    robot.save
+    # robot = Robot.new(name: "Robbie", state: "ready")
+    # robot.save
 
 	  status 200
 	  json "Initialized"
