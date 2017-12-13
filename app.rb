@@ -16,7 +16,7 @@ DataMapper.auto_migrate!
 # GET /
 #
 get '/' do
-  'Welcome to Robot Server API'
+  "Welcome to Robot Server API\n"
 end
 
 #
@@ -27,7 +27,7 @@ get '/server/health' do
 		content_type :json
     # json "Healthy"
     status 200
-    'Healthy'
+    "Healthy\n"
   else
   	status 503
 	  #json "ERROR: problem loading file!"
@@ -51,10 +51,10 @@ get '/initialize' do
     # robot.save
 
 	  status 200
-	  json "Initialized"
+	  "Initialized"
 	else
 		status 500
-	  json "ERROR: problem loading file!"
+	  "ERROR: problem loading file!\n"
 	end
 end
 
@@ -87,13 +87,15 @@ get '/robot/start/:id' do
   if robot[:state] == "ready"
   	
   	robot.update(:state => 'starting')
+  	# Maybe add time wait here?
   	robot.update(:state => 'started')
 
   	status 200
-    'Started'
+    "Started\n"
   else
   	status 400
-	  json review.errors.full_messages
+	  #json robot.errors.full_messages
+	  "ERROR: Bad Request Cannot start robot!\n"
 	end
 end
 
@@ -107,12 +109,36 @@ get '/robot/recharge/:id' do
   if robot[:state] == "ready"
   	
   	robot.update(:state => 'recharging')
-  	robot.update(:state => 'recharged')
+  	# Maybe add time wait here?
+  	robot.update(:state => 'ready')
 
   	status 200
-    'Recharged'
+    "Recharged and Ready\n"
   else
   	status 400
-	  json review.errors.full_messages
+	  #json robot.errors.full_messages
+	  "ERROR: Bad Request Cannot recharge robot!\n"
+	end
+end
+
+#
+# GET /robot/stop/:id
+#
+get '/robot/stop/:id' do
+  content_type :json
+  robot = Robot.get params[:id]
+  robot.to_json
+  if robot[:state] == "started"
+  	
+  	robot.update(:state => 'stopping')
+  	# Maybe add time wait here?
+  	robot.update(:state => 'ready')
+
+  	status 200
+    "Robot stopped! Ready\n"
+  else
+  	status 400
+	  #json robot.errors.full_messages
+	  "ERROR: Bad Request Cannot stop robot!\n"
 	end
 end

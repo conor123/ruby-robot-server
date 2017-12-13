@@ -46,7 +46,11 @@ curl http://localhost:4567/initialize -v
 
 curl http://localhost:4567/robots
 
-curl http://localhost:4567/robot/start/:id
+curl http://localhost:4567/robot/start/1
+
+curl http://localhost:4567/robot/stop/1
+
+curl http://localhost:4567/robot/recharge/1
 
 
 
