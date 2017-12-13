@@ -163,3 +163,22 @@ get '/server/stop' do
 	# end
 end
 
+#
+# GET /external/script
+#
+get '/external/script' do
+ #  content_type :json
+  begin
+  	file = "robots.sh"
+  	#cmd = "./#{file} Robbie"
+  	cmd = "echo hi!!!"
+		system(cmd)
+		status 200
+	  "Script OK! Ready\n"
+	rescue
+    status 500
+	  "ERROR: problem stopping server!\n"
+	end
+
+	# end
+end

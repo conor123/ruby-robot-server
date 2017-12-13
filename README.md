@@ -9,6 +9,7 @@ Simple Sinatra API with SQLite backend
 Dependencies
 ============
 Ruby 2.3.4
+Running on Mac terminal, not tested on Windows OS
 
 Congiguration
 =============
@@ -57,6 +58,9 @@ curl http://localhost:4567/robot/stop/1
 
 curl http://localhost:4567/robot/recharge/1
 
+curl http://localhost:4567/server/stop
+
+curl http://localhost:4567/external/script
 
 
 TODO
