@@ -61,7 +61,7 @@ curl http://localhost:4567/robot/recharge/1
 
 TODO
 ====
-- Shutdown Server
+
 - External script
 - 
 
@@ -69,4 +69,5 @@ Done
 ----
 - Load JSON Configs
 - TDD
-- Load JSON Config
+- Basic state management
+- Shutdown Server: curl http://localhost:4567/server/stop
