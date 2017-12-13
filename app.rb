@@ -91,10 +91,8 @@ get '/robot/start/:id' do
 	  
 	  d = DateTime.now
     d.strftime("%d/%m/%Y %H:%M")
-    
-  	
   	system("echo Starting up, wait for 3s...")
-  	system("echo state: #{robot[:state]}; time: #{d}")
+  	system("echo state #{robot[:state]}; time #{d}")
 
   	sleep 3
 
@@ -106,7 +104,7 @@ get '/robot/start/:id' do
     
   	
   	system("echo After 3s...")
-  	system("echo state: #{robot[:state]}; time: #{d}")
+  	system("echo state #{robot[:state]}; time #{d}")
 
   	robot = Robot.get! params[:id]
 	  robot.to_json
@@ -116,7 +114,7 @@ get '/robot/start/:id' do
     
   	
   	system("echo second check...")
-  	system("echo state: #{robot[:state]}; time: #{d}")
+  	system("echo state #{robot[:state]}; time #{d}")
 
 	  if robot[:state] == "starting"
 
@@ -149,6 +147,12 @@ get '/robot/recharge/:id' do
 
   	status 200
     "Recharged and Ready\n"
+  elsif robot[:state] == "stopping"
+  	robot.update(:state => 'ready')
+  	robot.update(:state => 'recharging')
+  	# Maybe add time wait here?
+  	robot.update(:state => 'ready')
+
   else
   	status 400
 	  #json robot.errors.full_messages
