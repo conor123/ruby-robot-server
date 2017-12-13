@@ -66,8 +66,8 @@ curl http://localhost:4567/external/script
 TODO
 ====
 
-- External script
-- 
+- External script manage after spawn
+- Refactor code around Objects for file loading, config etc 
 
 Done
 ----
@@ -75,3 +75,4 @@ Done
 - TDD
 - Basic state management
 - Shutdown Server: curl http://localhost:4567/server/stop
+- External script Spawn
