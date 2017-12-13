@@ -1,7 +1,19 @@
 Robots Server
 =============
 
-Sinatra App
+About
+-----
+
+Simple Sinatra API with SQLite backend
+
+Dependencies
+============
+Ruby 2.3.4
+
+Installation
+============
+
+bundle install
 
 Run Server
 ==========
@@ -15,15 +27,18 @@ Home
 http://localhost:4567/
 
 
+Testing
+=======
+To run a test
 
+ruby -Ilib tests/app_test.rb
 
-TODO
-====
-- Load JSON Config
+or from Rakefile
 
+`rake test`
 
-Tests
-=====
+Curl Endpoints
+==============
 
 curl http://localhost:4567/health
 
@@ -31,4 +46,12 @@ curl http://localhost:4567/robots
 
 curl http://localhost:4567/initialize -v
 
+TODO
+====
 
+- Load JSON Config
+
+Done
+----
+- Load JSON Configs
+- TDD

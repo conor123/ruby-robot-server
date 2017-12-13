@@ -12,15 +12,32 @@ DataMapper.setup(:default, 'sqlite:///Users/cr/dev_tests/ruby/robots/data/data.d
 DataMapper.finalize
 DataMapper.auto_migrate!
 
+#
+# GET /
+#
 get '/' do
-  'Welcome to Robot Server API!'
+  'Welcome to Robot Server API'
 end
 
-get '/health' do
-  status 200
-  json "Healthy"
+#
+# GET /health
+#
+get '/server/health' do
+	if Robot.all
+		content_type :json
+    status 200
+  # json "Healthy"
+    'Healthy'
+  else
+  	status 500
+	  #json "ERROR: problem loading file!"
+	  json review.errors.full_messages
+	end
 end
 
+#
+# GET /initialize
+#
 get '/initialize' do
 
   if (file = File.read 'robots.json')
@@ -41,9 +58,23 @@ get '/initialize' do
 	end
 end
 
+#
+# GET /robots
+#
 get '/robots' do
   content_type :json
   robots = Robot.all
   robots.to_json
 
 end
+
+#
+# GET /robot/:id
+#
+get '/robot/:id' do
+  content_type :json
+  review = Robot.get params[:id]
+  review.to_json
+end
+
+
