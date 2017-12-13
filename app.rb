@@ -10,7 +10,7 @@ require 'robot'
 #DataMapper.setup(:default, 'sqlite::memory:') 
 DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/data/data.db")
 DataMapper.finalize
-#DataMapper.auto_migrate!
+#DataMapper.auto_migrate! # Truncates tables!
 #DataMapper.auto_upgrade!
 
 #
