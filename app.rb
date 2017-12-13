@@ -25,15 +25,16 @@ end
 # GET /health
 #
 get '/server/health' do
-	if Robot.all
+	begin ( Robot.all && File.read('robots.json') )
 		content_type :json
     # json "Healthy"
     status 200
     "Healthy\n"
-  else
+  rescue
   	status 503
 	  #json "ERROR: problem loading file!"
-	  json review.errors.full_messages
+	  #json review.errors.full_messages
+	  "ERROR: Database or Robot file NOT Healthy!\n"
 	end
 end
 
@@ -42,7 +43,7 @@ end
 #
 get '/initialize' do
 
-  if (file = File.read 'robots.json')
+  begin (file = File.read 'robots.json')
 	  robots = JSON.load(file, nil, symbolize_names: true)
     robots.each { |r| 
     	robot = Robot.new(name: r[:name], state: "ready")
@@ -53,8 +54,8 @@ get '/initialize' do
     # robot.save
 
 	  status 200
-	  "Initialized"
-	else
+	  "Initialized\n"
+	rescue
 		status 500
 	  "ERROR: problem loading file!\n"
 	end
@@ -150,10 +151,15 @@ end
 #
 get '/server/stop' do
  #  content_type :json
-
-	Process.kill("INT", Process.pid)
-	status 200
-  "Server stopped! Ready\n"
+  begin
+		Process.kill("INT", Process.pid)
+		status 200
+	  "Server stopped! Ready\n"
+	rescue
+    status 500
+	  "ERROR: problem stopping server!\n"
+	end
 
 	# end
 end
+
