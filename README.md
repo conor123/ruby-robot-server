@@ -10,6 +10,11 @@ Dependencies
 ============
 Ruby 2.3.4
 
+Congiguration
+=============
+
+- Please add a suitable sqlite dir
+
 Installation
 ============
 
@@ -56,10 +61,12 @@ curl http://localhost:4567/robot/recharge/1
 
 TODO
 ====
-
-- Load JSON Config
+- Shutdown Server
+- External script
+- 
 
 Done
 ----
 - Load JSON Configs
 - TDD
+- Load JSON Config

@@ -8,7 +8,7 @@ Bundler.require
 require 'robot'
 
 #DataMapper.setup(:default, 'sqlite::memory:') 
-DataMapper.setup(:default, 'sqlite:///Users/cr/dev_tests/ruby/robots/data/data.db')
+DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/data/data.db")
 DataMapper.finalize
 DataMapper.auto_migrate!
 
