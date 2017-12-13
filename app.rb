@@ -182,13 +182,13 @@ get '/external/script' do
   begin
   	file = "#{Dir.pwd}/robots.sh"
   	#cmd = "echo #{file}"
-  	cmd = "./#{file}"
+  	cmd = "bash #{file} Robbie"
 
-    #pid = Process.spawn( system( cmd ) )
+    pid = Process.spawn( system( cmd ) )
     #Process.detach pid
     #status = Process.wait(pid, 0)
 		
-		system(">>> Status: #{status}")
+		system("echo Status: #{status}")
   	
 
 		#system(cmd)
