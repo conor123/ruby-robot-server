@@ -1,6 +1,6 @@
 #!/bin/bash
 MYNAME=$1
-NAP=2
+NAP=1
 STATE=starting
 COUNTER=0
 

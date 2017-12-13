@@ -4,7 +4,7 @@ class Robot
     property :id, Serial
     property :name, String
     property :state, String
-    property :pid, Integer
+    property :pid, String
 
     validates_presence_of :name
     validates_presence_of :state

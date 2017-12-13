@@ -186,19 +186,23 @@ get '/external/robot/start/:id' do
   begin
   	file = "#{Dir.pwd}/robots.sh"
   	#cmd = "echo #{file}"
-  	cmd = "bash #{file} #{robot[:name]}"
+  	cmd = "bash #{file} #{robot[:name]} &"
+    pid = nil
 
-    Thread.new do 
-      pid = Process.spawn( system( cmd ) )
-      robot.update(:pid => 99999)
-      Process.detach pid
-      status = Process.wait(pid, 0)
+    tid = Thread.new do 
+      pid = Process.spawn do
+        system( cmd )
+        system("echo here!")
+        robot.update(:pid => pid)
+        # Process.detach pid
+        # status = Process.wait(pid, 0)
+      end
     end
     
-
+    robot.update(:pid => tid)
 
 		status 200
-	  "Script OK! Ready\n"
+	  "Script OK! PID is #{pid}, TID is #{tid}\n"
 	rescue
     status 500
 	  "ERROR: problem running script!\n"
@@ -216,7 +220,7 @@ get '/external/robot/stop/:id' do
   robot.to_json
   pid = robot[:pid]
 
-  system("echo robit id: #{pid}\n")
+  system("echo Robot id: #{pid}\n")
 
   # system("echo Status: #{status} sleeping 3s...")
   # sleep 3
