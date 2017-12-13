@@ -4,6 +4,12 @@ NAP=2
 STATE=starting
 COUNTER=0
 
+echo ">>> Robots Script Running!"
+
+#
+# Functions
+#
+
 endservice() {
     COUNTER=3
     STATE=stopping

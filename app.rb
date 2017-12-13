@@ -169,15 +169,16 @@ end
 get '/external/script' do
  #  content_type :json
   begin
-  	file = "robots.sh"
-  	#cmd = "./#{file} Robbie"
-  	cmd = "echo hi!!!"
+  	file = "#{Dir.pwd}/robots.sh"
+  	#cmd = "echo #{file}"
+  	cmd = "./#{file}"
+  	#cmd = "echo hi!!"
 		system(cmd)
 		status 200
 	  "Script OK! Ready\n"
 	rescue
     status 500
-	  "ERROR: problem stopping server!\n"
+	  "ERROR: problem running script!\n"
 	end
 
 	# end
