@@ -38,7 +38,7 @@ To run a test
 
 ruby -Ilib tests/app_test.rb
 
-or from Rakefile
+or from Rakefile (will throw some warnings, but works OK)
 
 `rake test`
 

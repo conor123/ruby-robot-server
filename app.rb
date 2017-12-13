@@ -12,6 +12,8 @@ DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/data/data.db")
 DataMapper.finalize
 DataMapper.auto_migrate!
 
+#puts ">>> Running process: #{Process.pid}"
+
 #
 # GET /
 #
@@ -141,4 +143,17 @@ get '/robot/stop/:id' do
 	  #json robot.errors.full_messages
 	  "ERROR: Bad Request Cannot stop robot!\n"
 	end
+end
+
+#
+# GET /server/stop
+#
+get '/server/stop' do
+ #  content_type :json
+
+	Process.kill("INT", Process.pid)
+	status 200
+  "Server stopped! Ready\n"
+
+	# end
 end
