@@ -44,7 +44,7 @@ get '/initialize' do
   begin (file = File.read 'robots.json')
 	  robots = JSON.load(file, nil, symbolize_names: true)
     robots.each { |r| 
-    	robot = Robot.new(name: r[:name], state: "ready")
+    	robot = Robot.new(name: r[:name], state: "ready", pid: nil)
     	robot.save
     }
 
@@ -177,21 +177,25 @@ end
 #
 # GET /external/script
 #
-get '/external/script' do
+get '/external/robot/start/:id' do
+  robot = Robot.get params[:id]
+  robot.to_json
+  #if robot[:state] == "ready"
+  #robot.update(:state => 'recharging')
   #  content_type :json
   begin
   	file = "#{Dir.pwd}/robots.sh"
   	#cmd = "echo #{file}"
-  	cmd = "bash #{file} Robbie"
+  	cmd = "bash #{file} #{robot[:name]}"
 
-    pid = Process.spawn( system( cmd ) )
-    #Process.detach pid
-    #status = Process.wait(pid, 0)
-		
-		system("echo Status: #{status}")
-  	
+    Thread.new do 
+      pid = Process.spawn( system( cmd ) )
+      robot.update(:pid => 99999)
+      Process.detach pid
+      status = Process.wait(pid, 0)
+    end
+    
 
-		#system(cmd)
 
 		status 200
 	  "Script OK! Ready\n"
@@ -201,4 +205,22 @@ get '/external/script' do
 	end
 
 	# end
+end
+
+#
+# GET /external/script
+#
+get '/external/robot/stop/:id' do
+
+  robot = Robot.get params[:id]
+  robot.to_json
+  pid = robot[:pid]
+
+  system("echo robit id: #{pid}\n")
+
+  # system("echo Status: #{status} sleeping 3s...")
+  # sleep 3
+
+  # Process.kill("INT", pid)
+  
 end
