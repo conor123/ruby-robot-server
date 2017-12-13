@@ -43,11 +43,14 @@ class MainAppTest < Minitest::Test
   # end
 
   #
-  # TESTS behaviousr
+  # TESTS typical run behaviour
   #
   def test_simulation
     get '/initialize'
     assert_equal 200, last_response.status
+
+    get '/robot/stop/1'
+    assert_equal 400, last_response.status
     
     get '/robot/recharge/1'
     assert_equal 200, last_response.status
@@ -61,8 +64,11 @@ class MainAppTest < Minitest::Test
     get '/robot/stop/1'
     assert_equal 200, last_response.status
 
-
   end
 
+  def after_all
+    get '/server/stop'
+    assert_equal 200, last_response.status
+  end
 
 end

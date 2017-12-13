@@ -12,8 +12,6 @@ DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/data/data.db")
 DataMapper.finalize
 DataMapper.auto_migrate!
 
-#puts ">>> Running process: #{Process.pid}"
-
 #
 # GET /
 #
@@ -49,9 +47,6 @@ get '/initialize' do
     	robot = Robot.new(name: r[:name], state: "ready")
     	robot.save
     }
-
-    # robot = Robot.new(name: "Robbie", state: "ready")
-    # robot.save
 
 	  status 200
 	  "Initialized\n"
@@ -89,12 +84,49 @@ get '/robot/start/:id' do
   robot.to_json
   if robot[:state] == "ready"
   	
-  	robot.update(:state => 'starting')
-  	# Maybe add time wait here?
-  	robot.update(:state => 'started')
+  	robot.update!(:state => 'starting')
+  	
+  	robot = Robot.get params[:id]
+	  robot.to_json
+	  
+	  d = DateTime.now
+    d.strftime("%d/%m/%Y %H:%M")
+    
+  	
+  	system("echo Starting up, wait for 3s...")
+  	system("echo state: #{robot[:state]}; time: #{d}")
 
-  	status 200
-    "Started\n"
+  	sleep 3
+
+  	# robot = Robot.get params[:id]
+	  # robot.to_json
+
+	  d = DateTime.now
+    d.strftime("%d/%m/%Y %H:%M")
+    
+  	
+  	system("echo After 3s...")
+  	system("echo state: #{robot[:state]}; time: #{d}")
+
+  	robot = Robot.get! params[:id]
+	  robot.to_json
+
+	  d = DateTime.now
+    d.strftime("%d/%m/%Y %H:%M")
+    
+  	
+  	system("echo second check...")
+  	system("echo state: #{robot[:state]}; time: #{d}")
+
+	  if robot[:state] == "starting"
+
+  	  robot.update!(:state => 'started')
+  	  status 200
+      "Started\n"
+  	else
+  		status 400
+		  "ERROR: Bad Request Cannot start robot!\n"
+		end
   else
   	status 400
 	  #json robot.errors.full_messages
@@ -131,11 +163,17 @@ get '/robot/stop/:id' do
   content_type :json
   robot = Robot.get params[:id]
   robot.to_json
-  if robot[:state] == "started"
+  if ( robot[:state] == "started" || robot[:state] == "starting" )
   	
-  	robot.update(:state => 'stopping')
+  	robot.update!(:state => 'stopping')
+
+  	d = DateTime.now
+    d.strftime("%d/%m/%Y %H:%M")
+
+    system("echo state: #{robot[:state]} time: #{d}")
+
   	# Maybe add time wait here?
-  	robot.update(:state => 'ready')
+  	robot.update!(:state => 'ready')
 
   	status 200
     "Robot stopped! Ready\n"
@@ -159,21 +197,27 @@ get '/server/stop' do
     status 500
 	  "ERROR: problem stopping server!\n"
 	end
-
-	# end
 end
 
 #
 # GET /external/script
 #
 get '/external/script' do
- #  content_type :json
+  #  content_type :json
   begin
   	file = "#{Dir.pwd}/robots.sh"
   	#cmd = "echo #{file}"
   	cmd = "./#{file}"
-  	#cmd = "echo hi!!"
-		system(cmd)
+
+    #pid = Process.spawn( system( cmd ) )
+    #Process.detach pid
+    #status = Process.wait(pid, 0)
+		
+		system(">>> Status: #{status}")
+  	
+
+		#system(cmd)
+
 		status 200
 	  "Script OK! Ready\n"
 	rescue
