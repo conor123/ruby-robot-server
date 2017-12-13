@@ -25,11 +25,11 @@ end
 get '/server/health' do
 	if Robot.all
 		content_type :json
+    # json "Healthy"
     status 200
-  # json "Healthy"
     'Healthy'
   else
-  	status 500
+  	status 503
 	  #json "ERROR: problem loading file!"
 	  json review.errors.full_messages
 	end
@@ -73,8 +73,46 @@ end
 #
 get '/robot/:id' do
   content_type :json
-  review = Robot.get params[:id]
-  review.to_json
+  robot = Robot.get params[:id]
+  robot.to_json
 end
 
+#
+# GET /robot/start/:id
+#
+get '/robot/start/:id' do
+  content_type :json
+  robot = Robot.get params[:id]
+  robot.to_json
+  if robot[:state] == "ready"
+  	
+  	robot.update(:state => 'starting')
+  	robot.update(:state => 'started')
 
+  	status 200
+    'Started'
+  else
+  	status 400
+	  json review.errors.full_messages
+	end
+end
+
+#
+# GET /robot/recharge/:id
+#
+get '/robot/recharge/:id' do
+  content_type :json
+  robot = Robot.get params[:id]
+  robot.to_json
+  if robot[:state] == "ready"
+  	
+  	robot.update(:state => 'recharging')
+  	robot.update(:state => 'recharged')
+
+  	status 200
+    'Recharged'
+  else
+  	status 400
+	  json review.errors.full_messages
+	end
+end

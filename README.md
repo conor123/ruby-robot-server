@@ -40,11 +40,15 @@ or from Rakefile
 Curl Endpoints
 ==============
 
-curl http://localhost:4567/health
+curl http://localhost:4567/server/health
+
+curl http://localhost:4567/initialize -v
 
 curl http://localhost:4567/robots
 
-curl http://localhost:4567/initialize -v
+curl http://localhost:4567/robot/start/:id
+
+
 
 TODO
 ====
